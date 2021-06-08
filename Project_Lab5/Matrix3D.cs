@@ -3,14 +3,11 @@ using System.Drawing;
 
 namespace Project_Lab5
 {
-    class Matrix3D
+    public class Matrix3D : ICloneable
     {
         private float[] matrixXYZ;
         private float[] res;
-        public Matrix3D(float x, float y, float z)
-        {
-            matrixXYZ = new[] { x, y, z, 1 };
-        }
+
         public float X
         {
             get => matrixXYZ[0];
@@ -26,20 +23,12 @@ namespace Project_Lab5
             get => matrixXYZ[2];
             set => matrixXYZ[2] = value;
         }
-        public Matrix3D Mul(float[,] matrix)
+
+        public Matrix3D(float x, float y, float z)
         {
-            float sum;
-            res = new float[4];
-            for (int j = 0; j < 4; j++)
-            {
-                sum = 0;
-                for (int k = 0; k < 4; k++)
-                    sum += matrixXYZ[k] * matrix[k, j];
-                res[j] = sum;
-            }
-            Matrix3D ans = new Matrix3D(res[0], res[1], res[2]);
-            return ans;
+            matrixXYZ = new[] { x, y, z, 1 };
         }
+
         public static float[,] Mul(float[,] matrix1, float[,] matrix2)
         {
             float sum;
@@ -56,7 +45,21 @@ namespace Project_Lab5
             }
             return result;
         }
+        public Matrix3D Mul(float[,] matrix)
+        {
+            float sum;
+            res = new float[4];
+            for (int j = 0; j < 4; j++)
+            {
+                sum = 0;
+                for (int k = 0; k < 4; k++)
+                    sum += matrixXYZ[k] * matrix[k, j];
+                res[j] = sum;
+            }
 
+            Matrix3D ans = new Matrix3D(res[0], res[1], res[2]);
+            return ans;
+        }
 
         public float[,] RotationOX(float angle)
         {
@@ -97,9 +100,37 @@ namespace Project_Lab5
             matrixRotateZ[0, 1] = sin;
             return matrixRotateZ;
         }
-        public float DegreeToRad(float angle)
+
+        public static float DegreeToRad(float angle)
         {
             return (float)(angle * Math.PI / 180); // перевод в радианы
+        }
+
+        public static Matrix3D operator -(Matrix3D a, Matrix3D b)
+        {
+            return new Matrix3D(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
+        }
+        public static Matrix3D operator +(Matrix3D a, Matrix3D b)
+        {
+            return new Matrix3D(b.X + a.X, b.Y + a.Y, b.Z + a.Z);
+        }
+        public static Matrix3D operator +(Matrix3D a, float number)
+        {
+            return new Matrix3D(a.X + number, a.Y, a.Z);
+        }
+        public static Matrix3D operator *(Matrix3D a, float length)
+        {
+            return new Matrix3D(a.X * length, a.Y * length, a.Z * length);
+        }
+
+        public static implicit operator PointF(Matrix3D a)
+        {
+            return new PointF((a.X - a.Z / 2), -(a.Y - a.Z / 2));
+        }
+
+        public object Clone()
+        {
+            return new Matrix3D(X, Y, Z);
         }
     }
 }
