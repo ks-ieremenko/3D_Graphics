@@ -9,19 +9,22 @@ namespace Project_Lab5
         private float[] res;
         public Matrix3D(float x, float y, float z)
         {
-            matrixXYZ = new float[] { x, y, z, 1 };
+            matrixXYZ = new[] { x, y, z, 1 };
         }
-        public float GetX()
+        public float X
         {
-            return matrixXYZ[0];
+            get => matrixXYZ[0];
+            set => matrixXYZ[0] = value;
         }
-        public float GetY()
+        public float Y
         {
-            return matrixXYZ[1];
+            get => matrixXYZ[1];
+            set => matrixXYZ[1] = value;
         }
-        public float GetZ()
+        public float Z
         {
-            return matrixXYZ[2];
+            get => matrixXYZ[2];
+            set => matrixXYZ[2] = value;
         }
         public Matrix3D Mul(float[,] matrix)
         {
@@ -37,50 +40,66 @@ namespace Project_Lab5
             Matrix3D ans = new Matrix3D(res[0], res[1], res[2]);
             return ans;
         }
-        
-        public PointF To3DPoints(string ans = "0", int size = 1)
+        public static float[,] Mul(float[,] matrix1, float[,] matrix2)
         {
-            float x = (ans == "x") ? 0 : GetX(); // если проекция на YZ
-            float y = (ans == "y") ? 0 : GetY(); // если проекция на XZ
-            float z = (ans == "z") ? 0 : GetZ(); // если проекция на XY
-            return new PointF((x - z / 2) * size, -(y - z / 2) * size);
+            float sum;
+            float[,] result = new float[4, 4];
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    sum = 0;
+                    for (int k = 0; k < 4; k++)
+                        sum += matrix1[i, k] * matrix2[k, j];
+                    result[i, j] = sum;
+                }
+            }
+            return result;
         }
-        public float [,] RotationOX(float angle)
+
+
+        public float[,] RotationOX(float angle)
         {
-            float[,] matrix_rotateX = new float[4, 4];
-            Array.Clear(matrix_rotateX, 0, 4);
+            float[,] matrixRotateX = new float[4, 4];
+            Array.Clear(matrixRotateX, 0, 4);
             float sin = (float)Math.Sin(DegreeToRad(angle));
             float cos = (float)Math.Cos(DegreeToRad(angle));
-            matrix_rotateX[0, 0] = 1; matrix_rotateX[1, 1] = cos;
-            matrix_rotateX[2, 2] = cos; matrix_rotateX[3, 3] = 1;
-            matrix_rotateX[1, 2] = sin; matrix_rotateX[2, 1] = -sin;
-            return matrix_rotateX;
+
+            matrixRotateX[0, 0] = matrixRotateX[3, 3] = 1;
+            matrixRotateX[1, 1] = matrixRotateX[2, 2] = cos;
+            matrixRotateX[1, 2] = sin;
+            matrixRotateX[2, 1] = -sin;
+            return matrixRotateX;
         }
+
         public float[,] RotationOY(float angle)
         {
-            float[,] matrix_rotateY = new float[4, 4];
-            Array.Clear(matrix_rotateY, 0, 4);
+            float[,] matrixRotateY = new float[4, 4];
+            Array.Clear(matrixRotateY, 0, 4);
             float sin = (float)Math.Sin(DegreeToRad(angle));
             float cos = (float)Math.Cos(DegreeToRad(angle));
-            matrix_rotateY[0, 0] = cos; matrix_rotateY[1, 1] = 1;
-            matrix_rotateY[2, 2] = cos; matrix_rotateY[3, 3] = 1;
-            matrix_rotateY[0, 2] = -sin; matrix_rotateY[2, 0] = sin;
-            return matrix_rotateY;
+            matrixRotateY[0, 0] = matrixRotateY[2, 2] = cos;
+            matrixRotateY[1, 1] = matrixRotateY[3, 3] = 1;
+            matrixRotateY[0, 2] = -sin;
+            matrixRotateY[2, 0] = sin;
+            return matrixRotateY;
         }
+
         public float[,] RotationOZ(float angle)
         {
-            float[,] matrix_rotateZ = new float[4, 4];
-            Array.Clear(matrix_rotateZ, 0, 4);
+            float[,] matrixRotateZ = new float[4, 4];
+            Array.Clear(matrixRotateZ, 0, 4);
             float sin = (float)Math.Sin(DegreeToRad(angle));
             float cos = (float)Math.Cos(DegreeToRad(angle));
-            matrix_rotateZ[0, 0] = cos; matrix_rotateZ[1, 1] = cos;
-            matrix_rotateZ[2, 2] = 1; matrix_rotateZ[3, 3] = 1;
-            matrix_rotateZ[1, 0] = -sin; matrix_rotateZ[0, 1] = sin;
-            return matrix_rotateZ;
+            matrixRotateZ[0, 0] = matrixRotateZ[1, 1] = cos;
+            matrixRotateZ[2, 2] = matrixRotateZ[3, 3] = 1;
+            matrixRotateZ[1, 0] = -sin;
+            matrixRotateZ[0, 1] = sin;
+            return matrixRotateZ;
         }
         public float DegreeToRad(float angle)
         {
-            return (float)((angle * Math.PI) / 180); // перевод в радианы
+            return (float)(angle * Math.PI / 180); // перевод в радианы
         }
     }
 }

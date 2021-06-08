@@ -131,6 +131,7 @@ namespace Project_Lab5
         private List<Matrix3D> RotationVector(Graphics gr, List<Matrix3D> cubePoints, float angle = 0)
         {
             int endX = 0, endY = 0, endZ = 0;
+            
             int startX = 0, startY = 0, startZ = 0;
             string pattern = "-?[0-9]+;-?[0-9]+;-?[0-9]+"; //шаблон формата 1;1;1
             try
@@ -439,16 +440,11 @@ namespace Project_Lab5
             tbRotateX.Value = 0; tbRotateY.Value = 0; tbRotateZ.Value = 0;
             currentSize = 50; tbSize.Value = currentSize;
             tbRotateVector.Value = 0;
-            txtRotX.Text = 0.ToString(); txtRotY.Text = 0.ToString(); txtRotZ.Text = 0.ToString();
-            txtX.Text = 0.ToString(); txtY.Text = 0.ToString(); txtZ.Text = 0.ToString();
+            txtRotX.Text = txtRotY.Text  = txtRotZ.Text = 0.ToString();
+            txtX.Text = txtY.Text = txtZ.Text = 0.ToString();
             txtSize.Text = 50.ToString(); vectorTxt.Text = 0.ToString();
-            ProectionYZ.Checked = false;
-            ProectionXZ.Checked = false;
-            ProectionXY.Checked = false;
-            vecRdButton.Checked = false;
-            XRdButton.Checked = false;
-            YRdButton.Checked = false;
-            ZRdButton.Checked = false;
+            ProectionYZ.Checked = ProectionXY.Checked = ProectionXZ.Checked = vecRdButton.Checked = false;
+            XRdButton.Checked = YRdButton.Checked = ZRdButton.Checked = false;
             cubeClr = Color.Empty;
             edgeClr = Color.DarkViolet;
             pictureBox1.Invalidate();
